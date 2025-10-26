@@ -43,7 +43,7 @@ class AdminOrderItemSerializer(serializers.ModelSerializer):
 # Admin Order Serializer
 # ------------------------
 class AdminOrderSerializer(serializers.ModelSerializer):
-    user = serializers.CharField(source='user.username', read_only=True)
+    user = AdminUserSerializer(read_only=True)
     items = AdminOrderItemSerializer(many=True, read_only=True)
     total = serializers.DecimalField(max_digits=10, decimal_places=2, read_only=True)
 
