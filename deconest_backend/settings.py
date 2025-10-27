@@ -223,7 +223,8 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt.token_blacklist',
 
     # DecoNest apps
-    'users',
+    'users.apps.UsersConfig',
+
     'products',
     'cart',
     'wishlist',
@@ -281,6 +282,17 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'deconest_backend.urls'
+
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'deconest2025@gmail.com'
+EMAIL_HOST_PASSWORD = 'qjwdynhbofmgjfow'  # Gmail App Password
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
 
 TEMPLATES = [
     {
