@@ -1,11 +1,5 @@
-# from django.urls import path
-# from .views import OrderView, CheckoutView, LatestOrderView
 
-# urlpatterns = [
-#     path('', OrderView.as_view(), name='orders'),          # GET / POST all orders
-#     path('checkout/', CheckoutView.as_view(), name='checkout'),  # POST checkout
-#     path('latest/', LatestOrderView.as_view(), name='latest-order'), # GET latest
-# ]
+
 from django.urls import path
 from .views import (
     OrderView,
@@ -15,8 +9,8 @@ from .views import (
 )
 
 urlpatterns = [
-    path('', OrderView.as_view(), name='orders'),                    # GET / POST all orders
-    path('latest/', LatestOrderView.as_view(), name='latest-order'), # GET latest order
+    path('', OrderView.as_view(), name='orders'),                   
+    path('latest/', LatestOrderView.as_view(), name='latest-order'), 
 
     # Razorpay endpoints
     path('payments/create-order/', create_razorpay_order, name='razorpay-create-order'),

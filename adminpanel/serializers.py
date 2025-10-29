@@ -4,9 +4,7 @@ from products.models import Product
 from orders.models import Order, OrderItem
 
 
-# ------------------------
-# Admin User Serializer
-# ------------------------
+
 class AdminUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
@@ -14,9 +12,7 @@ class AdminUserSerializer(serializers.ModelSerializer):
         read_only_fields = ['id', 'date_joined', 'last_login']
 
 
-# ------------------------
-# Admin Product Serializer
-# ------------------------
+
 class AdminProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
@@ -24,9 +20,7 @@ class AdminProductSerializer(serializers.ModelSerializer):
         read_only_fields = ['id', 'created_at']
 
 
-# ------------------------
-# Admin Order Item Serializer
-# ------------------------
+
 class AdminOrderItemSerializer(serializers.ModelSerializer):
     product_title = serializers.CharField(source='product.title', read_only=True)
     subtotal = serializers.SerializerMethodField()
@@ -39,9 +33,7 @@ class AdminOrderItemSerializer(serializers.ModelSerializer):
         return obj.subtotal()
 
 
-# ------------------------
-# Admin Order Serializer
-# ------------------------
+
 class AdminOrderSerializer(serializers.ModelSerializer):
     user = AdminUserSerializer(read_only=True)
     items = AdminOrderItemSerializer(many=True, read_only=True)

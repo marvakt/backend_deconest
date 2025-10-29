@@ -10,7 +10,7 @@ class User(AbstractUser):
     is_blocked = models.BooleanField(default=False)
     email = models.EmailField(max_length=50, unique=True)
 
-    # Avoid reverse accessor clash
+    
     groups = models.ManyToManyField(
         Group,
         related_name='custom_user_groups',

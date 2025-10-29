@@ -1,3 +1,6 @@
+
+
+
 from rest_framework import permissions, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -9,20 +12,34 @@ class ProductListCreateView(APIView):
     permission_classes = [permissions.AllowAny]
 
     def get(self, request):
-        search = request.query_params.get('search')
-        queryset = Product.objects.filter(is_archived=False)
-        if search:
-            queryset = queryset.filter(Q(title__icontains=search) | Q(description__icontains=search) | Q(room__icontains=search))
-        return Response(ProductSerializer(queryset, many=True).data)
+        search = request.query_params.get('search', '')
+        room = request.query_params.get('room', '')
+        sort = request.query_params.get('sort', '')  
+        
 
-    def post(self, request):
-        if not request.user.is_staff:
-            return Response({'error': 'Only admins can add products'}, status=403)
-        serializer = ProductSerializer(data=request.data)
-        if serializer.is_valid():
-            product = serializer.save()
-            return Response(ProductSerializer(product).data, status=201)
-        return Response(serializer.errors, status=400)
+        queryset = Product.objects.filter(is_archived=False)
+
+       
+        if search:
+            queryset = queryset.filter(
+                Q(title__icontains=search) |
+                Q(description__icontains=search) |
+                Q(room__icontains=search)
+            )
+
+        
+        if room:
+            queryset = queryset.filter(room__iexact=room)
+
+      
+        if sort == 'lowToHigh':
+            queryset = queryset.order_by('price')
+        elif sort == 'highToLow':
+            queryset = queryset.order_by('-price')
+
+        serializer = ProductSerializer(queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
 
 class ProductDetailView(APIView):
     permission_classes = [permissions.AllowAny]
@@ -32,4 +49,5 @@ class ProductDetailView(APIView):
             product = Product.objects.get(pk=pk, is_archived=False)
         except Product.DoesNotExist:
             return Response({'error': 'Product not found'}, status=404)
-        return Response(ProductSerializer(product).data)
+        serializer = ProductSerializer(product)
+        return Response(serializer.data)

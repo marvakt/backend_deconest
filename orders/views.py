@@ -186,6 +186,7 @@
 #             status=status.HTTP_400_BAD_REQUEST
 #         )
 
+
 from rest_framework import permissions, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -198,13 +199,13 @@ from cart.models import CartItem
 from .models import Order, OrderItem
 from .serializers import OrderSerializer
 
-# --------------------------- Orders Views ---------------------------
+
 
 class OrderView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request):
-        """✅ Show only logged-in user's orders (no exceptions)"""
+        """ Show only logged-in user's orders (no exceptions)"""
         orders = (
             Order.objects.filter(user=request.user)
             .prefetch_related("items", "items__product")
@@ -256,7 +257,7 @@ class LatestOrderView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request):
-        """✅ Only user's latest order"""
+        """ Only user's latest order"""
         latest_order = (
             Order.objects.filter(user=request.user).order_by("-date").first()
         )
@@ -266,7 +267,7 @@ class LatestOrderView(APIView):
         return Response(serializer.data)
 
 
-# -------------------- Razorpay Integration --------------------
+
 client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))
 
 @api_view(["POST"])
@@ -325,7 +326,7 @@ def verify_razorpay_payment(request):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        # Payment verified, create order
+        
         cart_items = CartItem.objects.filter(user=user)
         if not cart_items.exists():
             return Response(

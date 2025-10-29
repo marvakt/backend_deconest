@@ -13,9 +13,7 @@ from orders.models import Order, OrderItem
 from .serializers import AdminUserSerializer, AdminProductSerializer, AdminOrderSerializer
 
 
-# ------------------------
-# Admin User Management
-# ------------------------
+
 class AdminUserListView(APIView):
     permission_classes = [permissions.IsAdminUser]
 
@@ -47,9 +45,7 @@ class AdminUserUnblockView(APIView):
         return Response({'message': f'User {user.username} unblocked successfully'})
 
 
-# ------------------------
-# Admin Product Management
-# ------------------------
+
 class AdminProductListCreateView(APIView):
     permission_classes = [permissions.IsAdminUser]
 
@@ -99,6 +95,10 @@ class AdminProductDetailView(APIView):
         product.save()
 
         return Response({'message': f'Product {product.title} updated successfully'})
+    def delete(self, request, pk):
+        product = get_object_or_404(Product, pk=pk)
+        product.delete()
+        return Response({'message': f'Product {product.title} deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
 
 
 class AdminProductArchiveView(APIView):
@@ -121,9 +121,6 @@ class AdminProductUnarchiveView(APIView):
         return Response({'message': f'Product {product.title} unarchived successfully'})
 
 
-# ------------------------
-# Admin Order Management
-# ------------------------
 class AdminOrderListView(APIView):
     permission_classes = [permissions.IsAdminUser]
 
